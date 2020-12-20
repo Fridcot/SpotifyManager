@@ -1,0 +1,29 @@
+﻿@inject IHttpClientFactory ClientFactory
+@inject IAccessTokenProvider TokenProvider
+@page "/user-profile"
+
+<h3>UserProfile</h3>
+<button @onclick="Authorize">Authorize</button>
+<h3>@Message</h3>
+
+@code {
+    public string Message { get; set; }
+
+    private async Task Authorize()
+    {
+        var tokenResponse = await TokenProvider.RequestAccessToken();
+        if(tokenResponse.TryGetToken(out var token))
+        {
+            Message = token.Value;
+        }
+        else{
+            Message = "ERROR";
+        }
+    }
+
+    private async Task Get()
+    {
+        var client = ClientFactory.CreateClient("ApiClient");
+
+    }
+}
